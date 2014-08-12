@@ -1,29 +1,29 @@
 <!doctype html>
 <html lang="en">
 
-	<head>
-		<meta charset="utf-8">
+<head>
+  <meta charset="utf-8">
 
-    <title>docker @ vmware</title>
+  <title>containers, engines, & whales</title>
 
-    <meta name="description" content="A presentation about Docker.">
-		<meta name="author" content="Nathan LeClaire">
+  <meta name="description" content="A presentation about Docker.">
+  <meta name="author" content="Nathan LeClaire">
 
-		<meta name="apple-mobile-web-app-capable" content="yes" />
-		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<link rel="stylesheet" href="css/reveal.min.css">
-		<link rel="stylesheet" href="css/theme/simple.css" id="theme">
+  <link rel="stylesheet" href="css/reveal.min.css">
+  <link rel="stylesheet" href="css/theme/simple.css" id="theme">
 
-		<!-- For syntax highlighting -->
-		<link rel="stylesheet" href="lib/css/zenburn.css">
+  <!-- For syntax highlighting -->
+  <link rel="stylesheet" href="lib/css/zenburn.css">
 
-		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
-		<script>
-			document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
-		</script>
+  <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+  <script>
+     document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+ </script>
 
 		<!--[if lt IE 9]>
 		<script src="lib/js/html5shiv.js"></script>
@@ -51,706 +51,202 @@
                 left: 32px;
             }
         </style>
-  </head>
+    </head>
 
-  <body>
-<div class="watermark">
-  <img src="images/watermark.png"></img>
-</div>
+    <body>
+        <div class="watermark">
+          <img src="images/watermark.png"></img>
+      </div>
 
-<div class="reveal">
+      <div class="reveal">
 
-<!-- Any section element inside of this container is displayed as a slide -->
-<div class="slides">
-<section data-markdown>
-    <script type="text/template">
-    ## hello to
-    ![vmware](images/vmware.png)
-    ## from
-    ![docker](images/docker.png)
-    <div class="tiny">presenters:  [Jérôme Petazzoni](http://twitter.com/jpetazzo) and [Nathan LeClaire](http://nathanleclaire.com)</div>
-    </script>
+        <!-- Any section element inside of this container is displayed as a slide -->
+        <div class="slides">
+            <section data-markdown>
+                <script type="text/template">
+                    ## Containers, Engines, & Whales
+                    ### *...an introduction to Docker*
+                    ![docker](images/diver.jpg)
+    <div class="tiny">presenter: [Nathan LeClaire](http://nathanleclaire.com)</div>
+</script>
 </section>
 <section data-markdown>
     <script type="text/template">
-    ## Welcome!
+        ## Welcome!
 
-    - We really appreciate you being here
-    - Today we're going to look at:
-         - Introduction to the Docker Engine and Docker Hub, including juicy technical details
-         - More advanced Docker topics such as running it in production
-         - Docker orchestration
-         - Docker tie-ins with VMware
+        - I really appreciate you being here
+        - Today we're going to look at:
+            - Introduction to the Docker Engine and Docker Hub - why are they useful and why are they cool?
+            - Basic usage
+            - Docker orchestration with `fig`
     </script>
 </section>
 <section data-markdown>
     <script type="text/template">
-    ## Who is Jérôme?
-    ![jerome](images/jerome.jpg)
+        ## Who am I?
+        
 
-    - Senior Engineer at Docker rotating between Ops, Support, and Evangelism
-    - Lots of great operations experience: Running dotCloud PaaS, building giant Xen clouds, putting all kinds of weird stuff in containers, etc.
-    - *Will* replace you with a very small shell script if he is grumpy
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-    ## Who is Nathan?
-    ![nathan](images/nathan.jpg)
+        ![nathan](images/nathan.jpg)
 
-    - Solutions Engineer at Docker with similar rotating cast of duties
-    - Interested in distributed systems and machine learning, but keeps getting sidetracked writing web applications
-    - Loves writing, music, and avocados
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-    # Let's start with some questions!
+        *I'm Nathan LeClaire.*
 
-    - Raise your hand if you've:
-         - Heard of Docker 
-         <!-- .element: class="fragment" data-fragment-index="1" -->
-         - Tried Docker online tutorial
-         <!-- .element: class="fragment" data-fragment-index="2" -->
-         - Installed/tried Docker binary
-         <!-- .element: class="fragment" data-fragment-index="3" -->
-         - Used Docker Hub
-         <!-- .element: class="fragment" data-fragment-index="4" -->
-         - Run Docker in development/QA/production
-         <!-- .element: class="fragment" data-fragment-index="5" -->
+        - Linux/UNIX-centric programmer, technology blogger, and geek
+        - Builder of Docker training materials, first line of defense on customer concerns with the technology 
+        - Lover of writing, music, and avocados
     </script>
 </section>
 <section data-markdown>
     <script type="text/template">
-    # What is Docker and why does it matter?
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-    ## What is it?
+        # Let's start with some questions!
 
-    - Platform for building, shipping, and running applications in Linux Containers.
-         - *"Engine"* is the binary that you interact with on the command line and deals mostly with: building applications and running them (some technical details on this in a moment).
-         - *"Hub"* is the Docker Hub website ([hub.docker.com](https://hub.docker.com)) and deals with community / social aspects, image distribution, and some cool features such as automatic building of images on push to Github.
+        - Raise your hand if you've:
+            - Heard of Docker 
+            <!-- .element: class="fragment" data-fragment-index="1" -->
+            - Tried Docker online tutorial
+            <!-- .element: class="fragment" data-fragment-index="2" -->
+            - Installed/tried Docker binary
+            <!-- .element: class="fragment" data-fragment-index="3" -->
+            - Used Docker Hub
+            <!-- .element: class="fragment" data-fragment-index="4" -->
+            - Run Docker in development/QA/production
+            <!-- .element: class="fragment" data-fragment-index="5" -->
     </script>
 </section>
 <section data-markdown>
     <script type="text/template">
-    ## Why?
-    - Deploy everything with lots of control and flexiblity.
-         - Webapps
-         - Databases
-         - Big data, etc.
-    - Provides nice process isolation abstraction that plays well with others.
-         - Loves both VMs and bare metal
-         - Can use configuration management tools if you like them, or not - your choice
-         - Escape dependency hell and non-repeatability
-    - Leverage enthusiastic, fast-growing OSS community
+        # What is Docker and why does it matter?
     </script>
 </section>
 <section data-markdown>
     <script type="text/template">
-    ## OK, how does it work?
-    - Takes advantage of containerization technology, providing lots of UX niceness on top of features borrowed from or inspired by:
-         - FreeBSD jails
-         - chroot
-         - Solaris Zones
-         - OpenVZ
-    - Containers share kernel with host, and in some cases bin/libs
-    - Originally used only [LXC](https://linuxcontainers.org/) under the hood, now there is a swappable "exec-driver" and the default is a Go-based implementation called libcontainer
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-    # Let's look under the hood a bit.
-    ![hood](images/underthehood.jpg)
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-    ## How do containers work ?
+        ## What is it?
 
-    - *namespaces* isolate processes
-         - pid
-         - mnt
-         - net
-         - uts
-         - ipc
-    - *cgroups* control resources
-         - memory
-         - cpu
-         - blkio
-         - devices
-    - Copy-on-write storage for efficient disk usage
-    </script>
-</section>
-<section data-markdown>
+        - Platform for building, shipping, and running applications in Linux Containers.
+            - *"Engine"* is the binary that you interact with on the command line and deals mostly with: building applications and running them (some technical details on this in a moment).
+            - *"Hub"* is the Docker Hub website ([hub.docker.com](https://hub.docker.com)) and deals with community / social aspects, image distribution, and some cool features such as automatic building of images on push to Github.
+     </script>
+ </section>
+ <section data-markdown>
     <script type="text/template">
-    ## *namespaces* isolate processes
-     - pid
-     - mnt
-     - net
-     - uts
-     - ipc
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-    ## namespaces: `pid`
-```
-jpetazzo@tarrasque:~$ ps aux | wc -l
-212
-jpetazzo@tarrasque:~$ sudo docker run -t -i ubuntu bash 
-root@ea319b8ac416:/# ps aux | wc -l
-2
-```
+        ## And most importantly:
+        ![community](images/contributors.jpg)
 
+        Docker is a *community*, that we would love to have you join!
     </script>
 </section>
 <section data-markdown>
     <script type="text/template">
-    ## namespaces: `mnt`
-```
-jpetazzo@tarrasque:~$ wc -l /proc/mounts
-32 /proc/mounts
-jpetazzo@tarrasque:~$ sudo docker run -t -i ubuntu bash 
-root@ea319b8ac416:/# wc -l /proc/mounts
-10 /proc/mounts
-```
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-    ## namespaces: `net`
-```sh
-root@ea319b8ac416:/# ip addr
-1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN 
-	link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00 
-	inet 127.0.0.1/8 scope host lo
-		valid_lft forever preferred_lft forever 
-	inet6 ::1/128 scope host
-		valid_lft forever preferred_lft forever
-22: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP qlen 1000 
-	link/ether 2a:d1:4b:7e:bf:b5 brd ff:ff:ff:ff:ff:ff
-		inet 10.1.1.3/24 brd 10.1.1.255 scope global eth0
-			valid_lft forever preferred_lft forever 
-		inet6 fe80::28d1:4bff:fe7e:bfb5/64 scope link 
-			valid_lft forever preferred_lft forever
-```
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-    ## namespaces: `uts`
-```sh
-jpetazzo@tarrasque:~$ hostname
-tarrasque
-root@ea319b8ac416:/# hostname
-ea319b8ac416
-```
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-    ## namespaces: `ipc`
-<pre>
-~$ ipcs
-IPC status from <running system> as of Wed Jul 30 17:29:34 PDT 2014
-T	 ID	 KEY		MODE	   OWNER	GROUP
-Message Queues:
+        ## Note&#58; There's a lot more to a community than code
 
-T	 ID	 KEY		MODE	   OWNER	GROUP
-Shared Memory:
+        Many ways to help:
 
-T	 ID	 KEY		MODE	   OWNER	GROUP
-Semaphores:
+        - Contribute to documentation
+        - Blog about your experiences using Docker (protip: tweet [@docker](http://twitter.com/docker) when you publish)
+        - Hang out with us and ask questions on IRC and Twitter
+        - Report bugs or issues on Github
+        - Make and share useful images
 
-~$ docker run -it ubuntu /bin/bash
-root@bc0b659b40bf:/# ipcs
+        <br>
+        All of these functions are **IMPORTANT**!
+    </script>
+</section>
+<section data-markdown>
+    <script type="text/template">
+        ## Why does Docker matter?
+        - Deploy everything with lots of control and flexiblity.
+            - Webapps
+            - Databases
+            - Big data, etc.
+        - Provides nice process isolation abstraction that plays well with others.
+            - Loves both VMs and bare metal
+            - Can use configuration management tools if you like them, or not - your choice
+        - Escape dependency hell and non-repeatability
+        - Leverage enthusiastic, fast-growing OSS community
+    </script>
+</section>
+<section data-markdown>
+    <script type="text/template">
+        ## OK, how does it work?
+        - Takes advantage of containerization technology, providing lots of UX niceness on top of features borrowed from or inspired by:
+            - FreeBSD jails
+            - chroot
+            - Solaris Zones
+            - OpenVZ
+        - Containers share kernel with host, and in some cases share binaries/libraries with other containers to save space
+        - Originally used only [LXC](https://linuxcontainers.org/) under the hood, now there is a swappable "exec-driver" and the default is a Go-based implementation called libcontainer
+    </script>
+</section>
+<section data-markdown>
+    <script type="text/template">
+        # Let's look under the hood a bit.
+        ![hood](images/underthehood.jpg)
+    </script>
+</section>
+<section data-markdown>
+    <script type="text/template">
+        ## How do containers work ?
 
------- Shared Memory Segments --------
-key		shmid	  owner	  perms	  bytes	  nattch	 status
+        - *namespaces* isolate processes
+            - pid
+            - mnt
+            - net
+            - uts
+            - ipc
+        - *cgroups* control resources
+            - memory
+            - cpu
+            - blkio
+            - devices
+            - Copy-on-write storage for efficient disk usage
+    </script>
+</section>
+<section data-markdown>
+    <script type="text/template">
+        ## Docker Hub
+        ![dockerhub](images/dockerhub.png)
+    </script>
+</section>
+<section data-markdown>
+    <script type="text/template">
+        ## What about Docker Hub?
 
------- Semaphore Arrays --------
-key		semid	  owner	  perms	  nsems
+        - Docker is a very powerful tool on CLI
+            - Becomes even more useful through network effects when you can use other peoples' images and vice versa
+            - Pull and push mechanic similar to what you are familiar with from DVCS
+        - Docker Hub provides a central Registry with:
+            - Verified and maintained "base images" for building other images (everything from Ubuntu to Node.js to Redis etc.)
+            - Paid private repositories if you don't want to share your images with the world
+            - Helpful features such as automated builds and webhooks
+            - User authentication and authorization
+    </script>
+</section>
+<section data-markdown>
+    <script type="text/template">
+        ## Automated Build
 
------- Message Queues --------
-key		msqid	  owner	  perms	  used-bytes   messages
+        - Trigger re-build of image based on Dockerfile in git repository (Github or Bitbucket)
 
-</pre>
+        ![automatedbuild](images/automatedbuild.png)
     </script>
 </section>
 <section data-markdown>
     <script type="text/template">
-    ## namespaces: `user`
+        ## Web Hooks & Build Triggers
 
-    - No demo, currently being integrated into Docker
-         - UID 0 => 1999 in container C1 is mapped to UID 10000 => 11999 in host
-         - UID 0 => 1999 in container C2 is mapped to UID 12000 => 13999 in host, and so on
-    - Adds one extra layer of security
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-    ## `cgroups` control resource usage
-     - memory
-     - cpu
-     - blkio
-     - devices
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-    ## cgroups: `memory`
-    - Keeps track pages used by each group:
-         - file (read/write/mmap from block devices; swap) 
-         - anonymous (stack, heap, anonymous mmap) 
-         - active (recently accessed)
-         - inactive (candidate for eviction)
-    - Each page is charged to a group
-    - Pages can be shared (e.g. if you use any copy-on-write filesystem)
-    - Individual (per-cgroup) limits and out-of-memory killer
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-    ## cgroups: `cpu` and `cpuset`
-    - Keep track of user/system CPU time
-    - Set relative weight per group
-    - Pin groups to specific CPU(s)
-        - Can be used to reserve CPUs for some apps
-        - This is also relevant for big NUMA systems
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-    ## cgroups: `blkio`
-    - Keep track of IO for each block device
-         - read vs. write; sync vs. async
-    - Set relative weights
-    - Set throttle (limits) for each block device
-         - read vs. write; bytes/sec. vs. operations/sec.
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-    ## cgroups: `devices`
-    - Controls read/write/mknod permissions
-    - Typically:
-         - allow: `/dev/{tty,zero,random,null}...`
-         - deny: everything else
-         - maybe: `/dev/net/tun`, `/dev/fuse`, `/dev/kvm`, `/dev/dri`...
-    - Fine-grained control for GPU, virtualization etc.
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-    ## Copy-on-write storage
-    - Create a new machine instantly instead of copying its whole filesystem
-    - Storage keeps track of what has changed
-    - Multiple storage plugins available (AUFS, device mapper, BTRFS, VFS...)
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-    ## Storage Options
-    ![storage_options](images/storage_options.png)
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-    ## Docker Hub
-    ![dockerhub](images/dockerhub.png)
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-    ## What about Docker Hub?
+        - Trigger actions (e.g. run test suite in CI) when build is complete on Docker Hub etc.
 
-    - Docker is a very powerful tool on CLI
-    - Becomes even more useful through network effects when you can use other peoples' images and vice versa
-    - Pull and push mechanic similar to what you are familiar with from DVCS
-    - Docker Hub provides a central Registry with:
-         - Verified and maintained "base images" for building other images (everything from Ubuntu to Node.js to Redis etc.)
-         - Paid private repositories if you don't want to share your images with the world
-         - Helpful features such as automated builds and webhooks
-         - User authentication and authorization
+        ![webhooks](images/webhooks.png)
     </script>
 </section>
 <section data-markdown>
     <script type="text/template">
-    ## Automated Build
-    
-    - Trigger re-build of image based on Dockerfile in git repository (Github or Bitbucket)
+        # Let's see some basic `docker` commands.
 
-    ![automatedbuild](images/automatedbuild.png)
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-    ## Web Hooks & Build Triggers
-    
-    - Trigger actions (e.g. run test suite in CI) when build is complete on Docker Hub etc.
-
-    ![webhooks](images/webhooks.png)
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-    # Demo
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-    # Running Docker in production
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-    # Building and distributing images
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-    ## Building images with Dockerfiles
-
-    - Provides a way to sum up the steps to take to build an image.  Once image is built, we can move it around and run it wherever we want.
-
-```
-FROM ubuntu:14.04
-MAINTAINER Docker Education Team <education@docker.com>
-
-RUN apt-get update
-RUN apt-get install -y nginx
-RUN echo 'Hi, I am in your container' \
-			>/usr/share/nginx/html/index.html
-
-CMD [ "nginx", "-g", "daemon off;" ]
-EXPOSE 80
-```
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-    ## Building images with Dockerfiles
-
-    - Great for most purposes
-         - Caching system allows full rebuilds that are still fast
-    - Drawbacks (currently being worked on)
-         - No separate build/run environments (don't ship a 5GB build image if you just need the 10MB artifact)
-         - Entitlement, credentials, and other secrets (what if the build process needs to access a private repository?)
-    - Workarounds
-         - Use *two* Dockerfiles, keep Dockerfiles and images private
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-    ## Image distribution (safe)
-
-    - Docker Hub
-         - `docker push` and `docker pull` just work without fiddling
-         - Both public and private images
-         - Drawback: no "On Premise" version, however this is one of the most requested features so expect to see it in the future
-    - Open Source Registry
-         - `docker run registry` (use `-P` option to expose it on LAN)
-         - Defaults to local storage
-         - Can use cloud storage (Swift, GCE, S3, Elliptics...)
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-    ## Image distribution (hacky)
-    - Hack around with `docker load`/`save`
-         - Load/save works with plain tarballs
-         - Put images wherever you want them
-         - [Dogestry](https://github.com/black-education/dogestry) available to do things this way (works with S3 too)
-              - Disadvantage: very hacky, not officially condoned
-    - Work in progress: pluggable transports
-         - Many things are *very good* at moving diffs (git, rsync, etc.)
-         - Can we learn something from them and bring it into Docker?
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-    # Service discovery
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-    ## Service discovery - let me count the ways
-    
-    - Use environment variables in our containers
-         - `docker run -e DB_HOST=... -e DB_PORT=... -e ...`
-    - Bind-mount a configuration file in the container
-         - `docker run -v /etc/docker/config/myapp.yaml:/config.yaml...`
-    - Resolve everything through a highly-available key-value store
-         - Zookeeper, etcd, Consul, etc.
-    - Resolve everything we need through DNS
-         - Consul, SkyDNS, Skydock, dnsmasq, etc.
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-    # Let's take a look at the different methods and "grade" them.
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-    # links
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-    ## links / environment variables
-
-    - Use `docker run --link` option to populate environment variables in a container to provide address, port, etc. of a process in another container.
-         - `docker run -d --name frontdb mysqlimage`
-         - `docker run -d --name web --link frontdb:sql webimage`
-    - Environment variables injected into second container (`web`):
-```
-SQL_PORT=tcp://172.17.0.10:5432
-SQL_PORT_5432_TCP=tcp://172.17.0.10:5432
-SQL_PORT_5432_TCP_ADDR=172.17.0.10
-SQL_PORT_5432_TCP_PORT=5432
-SQL_PORT_5432_TCP_PROTO=tcp
-```
-    - Doesn't work across Docker hosts
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-    ## links / environment variables
-
-    - <span class="green">+</span> Easy to integrate in your code
-         - Environment variable support is quite ubiquitous
-    - <span class="green">+</span> Easy to setup
-         - Start services, lookup ports, inject variables
-    - <span class="green">+</span> Even easier with links
-         - Fully automatic
-    - <span class="red">-</span> Static
-         - If a service moves, cannot update environment variables (without restarting container)
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-    # links grade:
-    # B
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-    # bind-mount configuration file
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-    ## bind-mount configuration file
-    - <span class="green">+</span> Easy to integrate in your code
-         - Not many languages without decent JSON/YAML parser
-    - <span class="green">+</span> Easy to setup
-         - Just like environment variables, but generate a file
-    - <span class="green">+</span> Kind of dynamic
-         - It's possible to update the configuration while the services run
-    - <span class="red">-</span> But not really
-         - Services have to detect the change and reload the file
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-    # bind-mounting configuration file grade:
-    # B
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-    ## key-value store
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-    ## key-value store
-
-    - <span class="green">+</span> Harder to integrate in your code
-         - HTTP requests instead of getenv are not too hard, but are still more overhead
-    - <span class="green">+</span> Harder to setup
-         - Must setup the key-value store, on multiple nodes
-    - <span class="green">+</span> Kind of dynamic
-         - Most of the key-value stores support a "watch" operation
-    - <span class="red">-</span> But not really
-         - Services *still* have to detect a change and reload
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-    # key-value store grade:
-    # D
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-    # DNS
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-    ## DNS
-
-    - <span class="green">+</span> Easy to integrate in your code
-         - No integration needed; "Just Works"
-    - <span class="red">-</span> Harder to setup
-         - Must setup a DNS system that you can easily update
-    - <span class="green">+</span> Dynamic
-         - Updating DNS zones is no problem
-    - No "push", but...
-         - services won't detect a change, but if something wrong happens (and results in a disconnection) they might re-resolve and retry
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-    # DNS grade:
-    # C
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-    # Are we doomed?
-    ![hammer](images/hammer.jpg)
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-    ## Let's look at another way of using links.
-    ![link](images/link.png)
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-    ## The ambassador pattern
-    
-    host 1 (database)
-<pre>
-docker run -d --name frontdb mysqlimage
-docker run -d --link frontdb:sql wiring
-</pre>
-    host 2 (web tier)
-<pre>
-docker run -d --name frontdb wiring
-docker run -d --link frontdb:sql nginximage
-</pre>
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-    ![amb1](images/ambassador_diagram_1.png)
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-    # What's with the "?"
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-    ![amb2](images/ambassador_diagram_2.png)
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-    # Magic?
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-    # Nope... Unicorns.
-    ![unicorn](images/unicorn.jpg)
-    <!-- .element: class="fragment" data-fragment-index="1" -->
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-    ## Tell me more about these... Unicorns.
-
-    - Constant work in progress, cool projects to check out:
-         - [Docksul](https://github.com/progrium/docksul)
-         - [Grand Ambassador](https://github.com/cpuguy83/docker-grand-ambassador)
-    - Or roll your own.
-         - Could use a highly-available key-value store
-         - HAProxy, stunnel, iptables
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-    ## links with ambassadors
-    - <span class="green">+</span> Easy to integrate in your code
-         - Still just environment variables
-    - <span class="green">+</span> Easy to setup in dev, harder in production
-         - Use normal links in dev; get the big guns out in prod
-    - <span class="green">+</span> Dynamic
-         - The ambassadors can reroute traffic if neccessary
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-    # Ambassadors grade:
-    # A
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-    # But warning:
-    # Construction Area
-    ![construction](images/construction.gif)
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-    # What about orchestration?
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-        ## What to do?
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-        ## Community has some ideas...
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-        ## fleet / etcd
-        ![coreos](images/backends/coreos.jpg)
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-        ## consul
-        ![consul](images/backends/consul.png)
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-        ## kubernetes
-        ![kubernetes](images/backends/kubernetes.jpg)
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-        ## mesos
-        ![mesos](images/backends/mesos.png)
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-        ## helios
-        ![helios](images/backends/helios.jpg)
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-        ## centurion
-        ![centurion](images/backends/centurion.gif)
+        - `docker ps` (see running containers)
+        - `docker run`   (create and start containers)
+        - `docker logs`  (look at container output)
+        - `docker stop` (remove containers)
+        - `docker build` (build images)
     </script>
 </section>
 <section data-markdown>
@@ -761,53 +257,24 @@ docker run -d --link frontdb:sql nginximage
 </section>
 <section data-markdown>
     <script type="text/template">
-        ## Wow, that's a lot of choices.
-    
-        - Choice == Good
-        - Fragmentation == Bad
-        - We want our applications to "Just Work, Everywhere".  If we buy in to one tool, are we stuck with it?
-    </script>
+      ## `fig` is fun
+      - And useful - `fig up` bootstraps a full prod-like dev environment *fast*
+
+      ![figup](images/figup.gif)
+  </script>
 </section>
 <section data-markdown>
     <script type="text/template">
-        ## libswarm
-    
-        ![bees](images/bees.jpg)
+       ## That's all folks.  Go forth and Dockerize!
 
-        A minimalist toolkit for composing network services.
-
-        > “There are a thousand ways to implement orchestration. But those should be a thousand plugins, exposed to the developer through a unified, elegant interface.”
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-        ## Examples of what it can do (from README.md on Github)
-    
-        - Aggregate all your Docker containers across multiple hosts and infrastructure providers, as if they were running on a single host
-        - Swap in a new clustering and service discovery system, without changing any application code
-        - Collect logs across an in-house Mesos cluster, a Cloud Foundry deployment, and individual servers staggered in 3 different datacenters, forward them to your legacy syslog deployment, then perform custom analytics on them.
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-		## But for now, `fig` is fun
-		- And useful - `fig up` bootstraps a full dev environment *fast*
-
-		![figup](images/figup.gif)
-    </script>
-</section>
-<section data-markdown>
-    <script type="text/template">
-	## That's all folks.  Go forth and Dockerize!
-
-	- Github: [github.com/docker/docker](https://github.com/docker/docker)
-	- Join us on :
-		 - `#docker` and `#docker-dev` on IRC  (Freenode)
-		 - `#libcontainer` and `#libswarm` on IRC (Freenode)
-	- Docker Hub is at [hub.docker.com](https://hub.docker.com) if you want to take it for a spin.
-	- These slides available online at [nathanleclaire.github.io/vmware-talk](https://nathanleclaire.github.io/vmware-talk)
-	- Don't be afraid to poke Nathan, Scott, or Jérôme if you have a question
-    </script>
+       - Github: [github.com/docker/docker](https://github.com/docker/docker)
+       - Join us on :
+           - `#docker` and `#docker-dev` on IRC  (Freenode)
+           - `#libcontainer` and `#libswarm` on IRC (Freenode)
+       - Docker Hub is at [hub.docker.com](https://hub.docker.com) if you want to take it for a spin.
+       - These slides available online at [nathanleclaire.github.io/docker101-talk](https://nathanleclaire.github.io/docker101-talk)
+       - Don't be afraid to poke me if you have a question!
+   </script>
 </section>
 </div>
 </div>
@@ -827,16 +294,16 @@ docker run -d --link frontdb:sql nginximage
 
         // Optional libraries used to extend on reveal.js
         dependencies: [
-            { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
-            { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-            { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-            { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
-            { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
-            { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+        { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+        { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+        { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+        { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+        { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+        { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
             // { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
             // { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
-        ]
-    });
+            ]
+        });
 </script>
 
 </body>
