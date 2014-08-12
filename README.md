@@ -1,6 +1,6 @@
 # libswarm
 
-A Reveal.js presentation on libswarm
+A Reveal.js presentation on Docker 101
 
 ## Author
 
